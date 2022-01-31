@@ -86,7 +86,10 @@ public class TransactionController {
             double dinero2 = toAccount.getBalance() + amount;
             fromAccount.setBalance(dinero1);
             toAccount.setBalance(dinero2);
+            accountRepository.save(fromAccount);
+            accountRepository.save(toAccount);
             */
+
             Transaction fromTransaction = new Transaction(TransactionType.CREDIT,-amount,description, LocalDateTime.now(),fromAccount);
             Transaction toTransaction = new Transaction(TransactionType.DEBIT, amount,description,LocalDateTime.now(),toAccount);
             transactionRepository.save(fromTransaction);
