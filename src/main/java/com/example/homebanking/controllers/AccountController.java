@@ -45,6 +45,13 @@ public class AccountController {
         return null;
     }
 
+    @GetMapping("/clients/current/accounts")
+    public List<AccountDTO> getAccounts(Authentication authentication){
+        Client client = this.clientRepository.findByEmail(authentication.getName());
+        return this.accountRepository.findAllByClient(client).stream().map(AccountDTO::new).collect(Collectors.toList());
+
+    }
+
     @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> createAccount(Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());

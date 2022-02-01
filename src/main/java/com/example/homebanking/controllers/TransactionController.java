@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api")
@@ -45,8 +44,8 @@ public class TransactionController {
 
     @Transactional
     @PostMapping("/clients/current/transactions")
-    public ResponseEntity<Object> createTransaction(@RequestParam double amount, @RequestParam String description,
-                                                    @RequestParam String fromAccountNumber, @RequestParam String toAccontNumber
+    public ResponseEntity<Object> createTransaction(@RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam double amount, @RequestParam String description
+
                                                     , Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());
         boolean isOwnByClient = false;
@@ -58,11 +57,11 @@ public class TransactionController {
         }
 
         Account fromAccount = accountRepository.findByNumber(fromAccountNumber);
-        Account toAccount = accountRepository.findByNumber(toAccontNumber);
-        if(amount == 0 || description.isEmpty() || fromAccountNumber.isEmpty() || toAccontNumber.isEmpty()){
+        Account toAccount = accountRepository.findByNumber(toAccountNumber);
+        if(amount == 0 || description.isEmpty() || fromAccountNumber.isEmpty() || toAccountNumber.isEmpty()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
-        else if(fromAccountNumber.equals(toAccontNumber)){
+        else if(fromAccountNumber.equals(toAccountNumber)){
             return new ResponseEntity<>("Same account numbers", HttpStatus.FORBIDDEN);
         }
         else if(fromAccount == null ){
@@ -78,18 +77,15 @@ public class TransactionController {
             return new ResponseEntity<>("Not enought money", HttpStatus.FORBIDDEN);
         }
         else{
-            /*
-            * Actualizar cuentas
-            *
-            *
+
             double dinero1 = fromAccount.getBalance() - amount;
             double dinero2 = toAccount.getBalance() + amount;
             fromAccount.setBalance(dinero1);
             toAccount.setBalance(dinero2);
+            /*
             accountRepository.save(fromAccount);
             accountRepository.save(toAccount);
             */
-
             Transaction fromTransaction = new Transaction(TransactionType.CREDIT,-amount,description, LocalDateTime.now(),fromAccount);
             Transaction toTransaction = new Transaction(TransactionType.DEBIT, amount,description,LocalDateTime.now(),toAccount);
             transactionRepository.save(fromTransaction);

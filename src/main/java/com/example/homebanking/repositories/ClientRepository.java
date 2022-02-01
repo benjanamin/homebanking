@@ -15,4 +15,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findAllByFirstNameIsLike(String firstName);
     List<Client> findAllByFirstNameIsLikeOrderByLastNameAsc(String firstName);
 
+
 }
