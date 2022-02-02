@@ -43,7 +43,7 @@ public class TransactionController {
     }
 
     @Transactional
-    @PostMapping("/clients/current/transactions")
+    @PostMapping("/transactions")
     public ResponseEntity<Object> createTransaction(@RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam double amount, @RequestParam String description
 
                                                     , Authentication authentication){
@@ -82,12 +82,12 @@ public class TransactionController {
             double dinero2 = toAccount.getBalance() + amount;
             fromAccount.setBalance(dinero1);
             toAccount.setBalance(dinero2);
-            /*
+
             accountRepository.save(fromAccount);
             accountRepository.save(toAccount);
-            */
-            Transaction fromTransaction = new Transaction(TransactionType.CREDIT,-amount,description, LocalDateTime.now(),fromAccount);
-            Transaction toTransaction = new Transaction(TransactionType.DEBIT, amount,description,LocalDateTime.now(),toAccount);
+
+            Transaction fromTransaction = new Transaction(TransactionType.DEBIT,-amount,description, LocalDateTime.now(),fromAccount);
+            Transaction toTransaction = new Transaction(TransactionType.CREDIT, amount,description,LocalDateTime.now(),toAccount);
             transactionRepository.save(fromTransaction);
             transactionRepository.save(toTransaction);
             return new ResponseEntity<>(HttpStatus.CREATED);
