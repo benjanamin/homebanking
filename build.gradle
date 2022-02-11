@@ -1,8 +1,17 @@
 	plugins {
-		id 'org.springframework.boot' version '2.6.2'
+		id 'org.springframework.boot' version '2.3.0.RELEASE'
 		id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 		id 'java'
 	}
+	jar {
+		manifest {
+			attributes(
+					'Start-Class': 'com.example.homebanking.HomebankingApplication'
+			)
+		}
+	}
+
+
 
 	group = 'com.example'
 	version = '0.0.1-SNAPSHOT'
@@ -20,8 +29,8 @@
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 		implementation 'org.springframework.boot:spring-boot-starter-web'
-		//runtimeOnly 'com.h2database:h2'
-		implementation 'org.postgresql:postgresql'
+		runtimeOnly 'com.h2database:h2'
+		//implementation 'org.postgresql:postgresql'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		implementation 'org.springframework.boot:spring-boot-starter-security'
 	}
